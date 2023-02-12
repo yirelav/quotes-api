@@ -41,8 +41,9 @@ public final class Quote {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "current_rating")
-    private Integer currentRating;
+    @Column(name = "current_rating", nullable = false, columnDefinition = "int default 0")
+    @Builder.Default
+    private Integer currentRating = 0;
 
     @OneToMany(mappedBy = "quote", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<RatingHistoryRecord> ratings = new ArrayList<>();

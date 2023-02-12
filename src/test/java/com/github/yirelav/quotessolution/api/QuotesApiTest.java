@@ -3,6 +3,8 @@ package com.github.yirelav.quotessolution.api;
 import com.github.yirelav.quotessolution.BaseApiTest;
 import com.github.yirelav.quotessolution.config.PostgresTestContainersInitializer;
 import com.github.yirelav.quotessolution.domain.entities.Author;
+import com.github.yirelav.quotessolution.domain.entities.Quote;
+import com.github.yirelav.quotessolution.domain.enums.Vote;
 import com.github.yirelav.quotessolution.utils.TestUtils;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.Matchers.*;
 
 @EnableAutoConfiguration
 @ContextConfiguration(
@@ -90,6 +95,53 @@ class QuotesApiTest extends BaseApiTest {
                         .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void givenTopWorse10Req_shouldReturnQuotesListWith200() throws Exception {
+        Author quotesAuthor = entityCreator.createTestAuthorEntity();
+        List<Quote> quotes = entityCreator.createNQuotes(11, quotesAuthor);
+
+        List<Author> voters = entityCreator.createNAuthors(10);
+
+        Quote bestQuote = quotes.get(4);
+        quoteService.changeRating(bestQuote.getId(), voters.get(0).getName(), Vote.UP);
+        quoteService.changeRating(bestQuote.getId(), voters.get(1).getName(), Vote.UP);
+        quoteService.changeRating(bestQuote.getId(), voters.get(2).getName(), Vote.UP);
+        quoteService.changeRating(bestQuote.getId(), voters.get(3).getName(), Vote.UP);
+
+        Quote second = quotes.get(8);
+        quoteService.changeRating(second.getId(), voters.get(0).getName(), Vote.UP);
+        quoteService.changeRating(second.getId(), voters.get(1).getName(), Vote.UP);
+
+        Quote last = quotes.get(2);
+        quoteService.changeRating(last.getId(), voters.get(0).getName(), Vote.DOWN);
+
+        Quote worse = quotes.get(1);
+        quoteService.changeRating(worse.getId(), voters.get(0).getName(), Vote.DOWN);
+        quoteService.changeRating(worse.getId(), voters.get(1).getName(), Vote.DOWN);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/quotes/top10")
+                        .contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(bestQuote.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(second.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[9].id").value(last.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(10)))
+                .andDo(MockMvcResultHandlers.print());
+
+                mockMvc.perform(MockMvcRequestBuilders.get("/quotes/worse10")
+                        .contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[9].id").value(second.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(last.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(worse.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(10)))
+                .andDo(MockMvcResultHandlers.print());
+
+
     }
 
 

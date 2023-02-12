@@ -10,6 +10,9 @@ import com.github.yirelav.quotessolution.web.exception.QuoteNotFoundException;
 import jakarta.persistence.LockModeType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.retry.annotation.Retryable;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -85,4 +89,7 @@ public class QuoteService {
         ratingService.changeRating(quote.get(), authorOpt.get(), direction);
     }
 
+    public Page<Quote> findPageAndSort(Pageable currentRating) {
+        return repository.findAll(currentRating);
+    }
 }

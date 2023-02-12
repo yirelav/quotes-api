@@ -8,16 +8,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class QuoteConverter {
-    public CreateQuoteResponse toCreateDto(Quote quote) {
+    public CreateQuoteResponse toCreateResponse(Quote quote) {
         return new CreateQuoteResponse(quote.getId(), quote.getAuthor().getName(), quote.getContent());
     }
 
-    public UpdateQuoteResponse toUpdateDto(Quote quote) {
+    public UpdateQuoteResponse toUpdateResponse(Quote quote) {
         return new UpdateQuoteResponse(quote.getId(), quote.getAuthor().getName(), quote.getContent());
 
     }
 
-    public QuoteResponse toQuoteDto(Quote quote) {
+    public QuoteResponse toQuoteResponse(Quote quote) {
         return new QuoteResponse(
                 quote.getId(),
                 quote.getAuthor().getName(),
