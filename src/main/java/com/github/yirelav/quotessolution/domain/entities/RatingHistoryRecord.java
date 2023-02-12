@@ -1,13 +1,13 @@
-package com.github.yirelav.quotessolution.entities;
+package com.github.yirelav.quotessolution.domain.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,44 +17,45 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.time.Instant;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "quotes")
+@Table(name = "ratings")
 @Builder
-public final class Quote {
+public final class RatingHistoryRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "content")
-    private String content;
+    @Column(name = "difference")
+    private Integer difference;
+
+    @Column(name = "total")
+    private Integer total;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
-    @OneToMany(mappedBy = "quote", orphanRemoval = true)
-    @Builder.Default
-    private List<Rating> ratings = new ArrayList<>();
+    @Column(name = "date")
+    private Instant date;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "quote_id")
+    private Quote quote;
 
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
-    private LocalDateTime created;
+    private Instant created;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updated;
-
-
-
+    private Instant updated;
 }
+

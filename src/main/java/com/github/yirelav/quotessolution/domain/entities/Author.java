@@ -1,4 +1,4 @@
-package com.github.yirelav.quotessolution.entities;
+package com.github.yirelav.quotessolution.domain.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +42,9 @@ public class Author {
     @OneToMany(mappedBy = "author", orphanRemoval = true)
     @Builder.Default
     private List<Quote> quotes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "author", orphanRemoval = true)
+    private List<RatingHistoryRecord> ratings = new ArrayList<>();
 
     @Override
     public String toString() {
