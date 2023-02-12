@@ -6,6 +6,7 @@ import com.github.yirelav.quotessolution.domain.enums.Vote;
 import com.github.yirelav.quotessolution.repository.QuoteRepository;
 import com.github.yirelav.quotessolution.web.dto.CreateQuoteRequest;
 import com.github.yirelav.quotessolution.web.exception.AuthorNotFoundException;
+import com.github.yirelav.quotessolution.web.exception.QuoteNotFoundException;
 import jakarta.persistence.LockModeType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,15 +72,17 @@ public class QuoteService {
     }
 
     @Modifying
-    public void changeRating(long quoteId, Vote direction) {
-        System.out.println("get quote");
-        repository.findById(quoteId).ifPresentOrElse(quote -> {
-                    ratingService.changeRating(quote, direction);
-                    System.out.println("changeRating");
+    public void changeRating(long quoteId, String authorName, Vote direction) {
+        Optional<Quote> quote = repository.findById(quoteId);
+        if (quote.isEmpty()) {
+            throw new QuoteNotFoundException(quoteId);
+        }
+        Optional<Author> authorOpt = authorService.findByName(authorName);
+        if (authorOpt.isEmpty()) {
+            throw new AuthorNotFoundException(authorName);
+        }
 
-                },
-                () -> log.warn("Quote with id '{}' not found", quoteId)
-        );
+        ratingService.changeRating(quote.get(), authorOpt.get(), direction);
     }
 
 }

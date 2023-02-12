@@ -10,15 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class RatingServiceTest extends BaseTest {
 
     @Autowired
     private QuoteService quoteService;
-
 
     @Test
     void changeRating() {
@@ -35,12 +34,10 @@ class RatingServiceTest extends BaseTest {
 
         quoteService.changeRating(quoteId, authors.get(3).getName(), Vote.DOWN);
         assertEquals(2, quoteRepository.findById(quoteId).get().getCurrentRating());
-
-
     }
 
     @Test
-    void removeRating() {
+    void whenRemoveQuote_thenRemoveQuoteRatings() {
         Author authorEntity = entityCreator.createTestAuthorEntity();
         List<Quote> quotes = entityCreator.createNQuotes(1, authorEntity);
         List<Author> authors = entityCreator.createNAuthors(4);
@@ -50,8 +47,6 @@ class RatingServiceTest extends BaseTest {
         quoteService.changeRating(quoteId, authors.get(0).getName(), Vote.UP);
         quoteService.changeRating(quoteId, authors.get(1).getName(), Vote.UP);
         quoteService.remove(quoteId);
-        quoteService.changeRating(quoteId, authors.get(2).getName(), Vote.UP);
-        quoteService.changeRating(quoteId, authors.get(3).getName(), Vote.DOWN);
 
 
         assertTrue(
@@ -63,6 +58,5 @@ class RatingServiceTest extends BaseTest {
 
         assertEquals(0, quoteRepository.count());
         assertEquals(0, ratingRepository.count());
-
     }
 }

@@ -2,16 +2,13 @@ package com.github.yirelav.quotessolution.repository;
 
 
 import com.github.yirelav.quotessolution.domain.entities.RatingHistoryRecord;
-import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.jpa.repository.Modifying;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public interface RatingRepository extends JpaRepository<RatingHistoryRecord, Long> {
-    Stream<RatingHistoryRecord> findAllByQuoteId(long quoteId);
+    List<RatingHistoryRecord> findAllByQuoteIdOrderByUpdated(long quoteId);
 
     Optional<RatingHistoryRecord> findFirstByQuoteIdOrderByUpdatedDesc(long quoteId);
 

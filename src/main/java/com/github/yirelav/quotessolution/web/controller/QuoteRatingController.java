@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,18 +26,25 @@ public class QuoteRatingController {
 
     @PostMapping("/{quoteId}/up")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void voteUp(@PathVariable long quoteId) {
-        quoteService.changeRating(quoteId, Vote.UP);
+    public void voteUp(
+            @PathVariable long quoteId,
+            @RequestParam String author
+    ) {
+        quoteService.changeRating(quoteId, author, Vote.UP);
     }
+
     @PostMapping("/{quoteId}/down")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void voteDown(@PathVariable long quoteId) {
-        quoteService.changeRating(quoteId, Vote.DOWN);
+    public void voteDown(
+            @PathVariable long quoteId,
+            @RequestParam String author
+    ) {
+        quoteService.changeRating(quoteId, author, Vote.DOWN);
     }
 
     @GetMapping("/{quoteId}/ratings")
     public List<RatingHistoryRecord> getRatings(@PathVariable Long quoteId) {
-        return ratingService.getQuoteRatings(quoteId).toList();
+        return ratingService.getQuoteRatings(quoteId);
     }
 
 }

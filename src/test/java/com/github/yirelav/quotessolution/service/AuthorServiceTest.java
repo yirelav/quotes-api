@@ -15,7 +15,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.github.yirelav.quotessolution.config.TestConstants.AUTHOR_MAIL;
 import static com.github.yirelav.quotessolution.config.TestConstants.AUTHOR_NAME;
 import static com.github.yirelav.quotessolution.config.TestConstants.AUTHOR_PASSWORD;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class AuthorServiceTest {
@@ -48,6 +51,7 @@ class AuthorServiceTest {
         assertNotEquals(TestConstants.AUTHOR_PASSWORD, author.getPassword());
 
         assertTrue(BCrypt.checkpw(TestConstants.AUTHOR_PASSWORD, author.getPassword()));
+        assertFalse(BCrypt.checkpw("wrong pass", author.getPassword()));
     }
 
 }
