@@ -1,7 +1,7 @@
 package com.github.yirelav.quotessolution.utils;
 
-import com.github.yirelav.quotessolution.domain.Author;
-import com.github.yirelav.quotessolution.domain.Quote;
+import com.github.yirelav.quotessolution.entities.Author;
+import com.github.yirelav.quotessolution.entities.Quote;
 import com.github.yirelav.quotessolution.repository.AuthorRepository;
 import com.github.yirelav.quotessolution.repository.QuoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;

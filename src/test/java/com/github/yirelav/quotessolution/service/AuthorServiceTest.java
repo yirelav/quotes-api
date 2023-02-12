@@ -1,22 +1,16 @@
 package com.github.yirelav.quotessolution.service;
 
-import com.github.yirelav.quotessolution.BaseTest;
 import com.github.yirelav.quotessolution.config.TestConstants;
-import com.github.yirelav.quotessolution.domain.Author;
+import com.github.yirelav.quotessolution.entities.Author;
 import com.github.yirelav.quotessolution.repository.AuthorRepository;
-import com.github.yirelav.quotessolution.utils.EntityCreator;
 import com.github.yirelav.quotessolution.web.dto.CreateAuthorRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
 
 import static com.github.yirelav.quotessolution.config.TestConstants.AUTHOR_MAIL;
 import static com.github.yirelav.quotessolution.config.TestConstants.AUTHOR_NAME;

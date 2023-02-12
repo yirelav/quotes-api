@@ -1,7 +1,7 @@
 package com.github.yirelav.quotessolution.api;
 
 import com.github.yirelav.quotessolution.BaseApiTest;
-import com.github.yirelav.quotessolution.domain.Author;
+import com.github.yirelav.quotessolution.entities.Author;
 import com.github.yirelav.quotessolution.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
