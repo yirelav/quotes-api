@@ -1,7 +1,7 @@
 package com.github.yirelav.quotessolution.service;
 
 import com.github.yirelav.quotessolution.config.TestConstants;
-import com.github.yirelav.quotessolution.entities.Author;
+import com.github.yirelav.quotessolution.domain.entities.Author;
 import com.github.yirelav.quotessolution.repository.AuthorRepository;
 import com.github.yirelav.quotessolution.web.dto.CreateAuthorRequest;
 import org.junit.jupiter.api.BeforeEach;

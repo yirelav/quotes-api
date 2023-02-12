@@ -1,7 +1,7 @@
 package com.github.yirelav.quotessolution.utils;
 
-import com.github.yirelav.quotessolution.entities.Author;
-import com.github.yirelav.quotessolution.entities.Quote;
+import com.github.yirelav.quotessolution.domain.entities.Author;
+import com.github.yirelav.quotessolution.domain.entities.Quote;
 import com.github.yirelav.quotessolution.repository.AuthorRepository;
 import com.github.yirelav.quotessolution.repository.QuoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +24,12 @@ public class EntityCreator {
     @Autowired
     AuthorRepository authorRepository;
 
-    public void createNQuotes(int n, Author author) {
+    public List<Quote> createNQuotes(int n, Author author) {
         List<Quote> articles = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             articles.add(getTestQuoteEntity(author));
         }
-        quoteRepository.saveAll(articles);
+        return quoteRepository.saveAll(articles);
     }
 
     public static Quote getTestQuoteEntity(Author author) {

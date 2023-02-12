@@ -1,10 +1,13 @@
 package com.github.yirelav.quotessolution.api;
 
 import com.github.yirelav.quotessolution.BaseApiTest;
-import com.github.yirelav.quotessolution.entities.Author;
+import com.github.yirelav.quotessolution.config.PostgresTestContainersInitializer;
+import com.github.yirelav.quotessolution.domain.entities.Author;
 import com.github.yirelav.quotessolution.utils.TestUtils;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -12,6 +15,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnableAutoConfiguration
+@ContextConfiguration(
+        initializers = {
+                PostgresTestContainersInitializer.class
+        }
+)
 class QuotesApiTest extends BaseApiTest {
 
     @Test
@@ -73,6 +81,15 @@ class QuotesApiTest extends BaseApiTest {
         assertEquals(0, quoteRepository.count());
     }
 
+    @RepeatedTest(10)
+    void givenRandomQuoteReq_shouldReturn200() throws Exception {
+        Author authorEntity = entityCreator.createAuthorEntity();
+        entityCreator.createNQuotes(2, authorEntity);
+        mockMvc.perform(MockMvcRequestBuilders.get("/quotes/random")
+                        .contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
 
 
 }
