@@ -2,6 +2,7 @@ package com.github.yirelav.quotessolution.web.exception;
 
 import com.github.yirelav.quotessolution.web.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -33,6 +34,11 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse authorNotFoundException(AuthorNotFoundException anfe) {
         return ErrorResponse.withMessage(anfe.getMessage());
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse constraintViolationException(ConstraintViolationException cve) {
+        return ErrorResponse.withMessage(cve.getMessage());
     }
 
 }

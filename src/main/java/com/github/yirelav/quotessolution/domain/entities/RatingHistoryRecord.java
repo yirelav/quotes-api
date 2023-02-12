@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +25,9 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "ratings")
+@Table(name = "ratings", uniqueConstraints = {
+        @UniqueConstraint(name = "uc_ratinghistoryrecord", columnNames = {"author_id", "quote_id"})
+})
 @Builder
 public final class RatingHistoryRecord {
 

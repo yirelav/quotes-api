@@ -37,6 +37,9 @@ ALTER TABLE authors
 ALTER TABLE authors
     ADD CONSTRAINT uc_authors_name UNIQUE (name);
 
+ALTER TABLE ratings
+    ADD CONSTRAINT uc_ratinghistoryrecord UNIQUE (author_id, quote_id);
+
 ALTER TABLE quotes
     ADD CONSTRAINT FK_QUOTES_ON_AUTHOR FOREIGN KEY (author_id) REFERENCES authors (id);
 

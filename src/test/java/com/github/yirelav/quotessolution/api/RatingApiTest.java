@@ -1,6 +1,7 @@
 package com.github.yirelav.quotessolution.api;
 
 import com.github.yirelav.quotessolution.BaseApiTest;
+import com.github.yirelav.quotessolution.config.TestConstants;
 import com.github.yirelav.quotessolution.domain.entities.Author;
 import com.github.yirelav.quotessolution.domain.entities.RatingHistoryRecord;
 import org.junit.jupiter.api.Test;
@@ -69,6 +70,23 @@ class RatingApiTest extends BaseApiTest {
         assertEquals(-1, ratingHistoryRecords.get(2).getTotal());
 
         assertEquals(-1, quoteService.findById(quoteId).get().getCurrentRating());
+    }
+
+    @Test
+    void givenTwoVotesByOneAuthor_shouldReturn400() throws Exception {
+        Long quoteId = prepareTestQuote();
+
+        String upTemplate = "/quotes/" + quoteId + "/up";
+        String downTemplate = "/quotes/" + quoteId + "/down";
+
+        mockMvc.perform(MockMvcRequestBuilders.post(upTemplate).contentType("application/json")
+                        .param("author", TestConstants.AUTHOR_NAME))
+                .andExpect(MockMvcResultMatchers.status().isAccepted());
+
+        mockMvc.perform(MockMvcRequestBuilders.post(downTemplate).contentType("application/json")
+                        .param("author", TestConstants.AUTHOR_NAME))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
     }
 
     private Long prepareTestQuote() {
