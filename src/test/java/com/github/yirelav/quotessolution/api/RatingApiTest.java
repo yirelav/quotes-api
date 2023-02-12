@@ -5,6 +5,7 @@ import com.github.yirelav.quotessolution.config.TestConstants;
 import com.github.yirelav.quotessolution.domain.entities.Author;
 import com.github.yirelav.quotessolution.domain.entities.RatingHistoryRecord;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 @EnableAutoConfiguration
 class RatingApiTest extends BaseApiTest {
@@ -38,6 +40,8 @@ class RatingApiTest extends BaseApiTest {
         assertEquals(2, ratingHistoryRecords.get(1).getTotal());
 
         assertEquals(2, quoteService.findById(quoteId).get().getCurrentRating());
+        Mockito.verify(ratingService, Mockito.times(2)).changeRating(any(), any(), any());
+
     }
 
     @Test
@@ -70,6 +74,8 @@ class RatingApiTest extends BaseApiTest {
         assertEquals(-1, ratingHistoryRecords.get(2).getTotal());
 
         assertEquals(-1, quoteService.findById(quoteId).get().getCurrentRating());
+        Mockito.verify(ratingService, Mockito.times(3)).changeRating(any(), any(), any());
+
     }
 
     @Test
@@ -87,6 +93,7 @@ class RatingApiTest extends BaseApiTest {
                         .param("author", TestConstants.AUTHOR_NAME))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
+        Mockito.verify(ratingService, Mockito.times(2)).changeRating(any(), any(), any());
     }
 
     private Long prepareTestQuote() {

@@ -5,6 +5,7 @@ import com.github.yirelav.quotessolution.config.TestConstants;
 import com.github.yirelav.quotessolution.domain.entities.Author;
 import com.github.yirelav.quotessolution.utils.TestUtils;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 @EnableAutoConfiguration
 class AuthorsApiTest extends BaseApiTest {
@@ -30,7 +32,10 @@ class AuthorsApiTest extends BaseApiTest {
         List<Author> authors = authorRepository.findAll();
         assertEquals(1, authors.size());
         assertEquals(TestConstants.AUTHOR_NAME, authors.get(0).getName());
+
+        Mockito.verify(authorService, Mockito.times(1)).create(any());
     }
+
     @Test
     void givenAlreadyExistsAuthorReq_shouldReturn400() throws Exception {
         entityCreator.createTestAuthorEntity();

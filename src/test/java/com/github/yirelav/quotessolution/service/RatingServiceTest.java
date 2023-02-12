@@ -5,6 +5,7 @@ import com.github.yirelav.quotessolution.domain.entities.Author;
 import com.github.yirelav.quotessolution.domain.entities.Quote;
 import com.github.yirelav.quotessolution.domain.enums.Vote;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 class RatingServiceTest extends BaseTest {
@@ -34,6 +36,8 @@ class RatingServiceTest extends BaseTest {
 
         quoteService.changeRating(quoteId, authors.get(3).getName(), Vote.DOWN);
         assertEquals(2, quoteRepository.findById(quoteId).get().getCurrentRating());
+        Mockito.verify(ratingService, Mockito.times(4)).changeRating(any(), any(), any());
+
     }
 
     @Test
@@ -58,5 +62,8 @@ class RatingServiceTest extends BaseTest {
 
         assertEquals(0, quoteRepository.count());
         assertEquals(0, ratingRepository.count());
+
+        Mockito.verify(ratingService, Mockito.times(2)).changeRating(any(), any(), any());
+
     }
 }

@@ -1,30 +1,25 @@
 package com.github.yirelav.quotessolution.api;
 
 import com.github.yirelav.quotessolution.BaseApiTest;
-import com.github.yirelav.quotessolution.config.PostgresTestContainersInitializer;
 import com.github.yirelav.quotessolution.domain.entities.Author;
 import com.github.yirelav.quotessolution.domain.entities.Quote;
 import com.github.yirelav.quotessolution.domain.enums.Vote;
 import com.github.yirelav.quotessolution.utils.TestUtils;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @EnableAutoConfiguration
-@ContextConfiguration(
-        initializers = {
-                PostgresTestContainersInitializer.class
-        }
-)
 class QuotesApiTest extends BaseApiTest {
 
     @Test
@@ -39,6 +34,7 @@ class QuotesApiTest extends BaseApiTest {
                 .andDo(MockMvcResultHandlers.print());
 
         assertEquals(1, quoteRepository.count());
+        Mockito.verify(quoteService, Mockito.times(1)).create(any());
     }
 
     @Test
@@ -50,6 +46,7 @@ class QuotesApiTest extends BaseApiTest {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
         assertEquals(0, quoteRepository.count());
+        Mockito.verify(quoteService, Mockito.times(1)).create(any());
     }
 
     @Test
@@ -69,6 +66,8 @@ class QuotesApiTest extends BaseApiTest {
                 .andDo(MockMvcResultHandlers.print());
 
         assertEquals(1, quoteRepository.count());
+        Mockito.verify(quoteService, Mockito.times(1)).update(id, createQuoteReq);
+
     }
 
 
@@ -85,6 +84,7 @@ class QuotesApiTest extends BaseApiTest {
                 .andDo(MockMvcResultHandlers.print());
 
         assertEquals(0, quoteRepository.count());
+        Mockito.verify(quoteService, Mockito.times(1)).remove(id);
     }
 
     @RepeatedTest(10)
@@ -95,7 +95,9 @@ class QuotesApiTest extends BaseApiTest {
                         .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
-    }
+
+        Mockito.verify(quoteService, Mockito.times(1)).findRandom();
+            }
 
     @Test
     void givenTopWorse10Req_shouldReturnQuotesListWith200() throws Exception {
@@ -131,7 +133,7 @@ class QuotesApiTest extends BaseApiTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(10)))
                 .andDo(MockMvcResultHandlers.print());
 
-                mockMvc.perform(MockMvcRequestBuilders.get("/quotes/worse10")
+        mockMvc.perform(MockMvcRequestBuilders.get("/quotes/worse10")
                         .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
@@ -140,8 +142,6 @@ class QuotesApiTest extends BaseApiTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(worse.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(10)))
                 .andDo(MockMvcResultHandlers.print());
-
-
     }
 
 
