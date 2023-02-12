@@ -25,11 +25,13 @@ public class EntityCreator {
     AuthorRepository authorRepository;
 
     public List<Quote> createNQuotes(int n, Author author) {
-        List<Quote> articles = new ArrayList<>(n);
+        List<Quote> quotes = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
-            articles.add(getTestQuoteEntity(author));
+            Quote testQuoteEntity = getTestQuoteEntity(author);
+            testQuoteEntity.setContent(testQuoteEntity.getContent() + i);
+            quotes.add(testQuoteEntity);
         }
-        return quoteRepository.saveAll(articles);
+        return quoteRepository.saveAll(quotes);
     }
 
     public static Quote getTestQuoteEntity(Author author) {
@@ -39,7 +41,18 @@ public class EntityCreator {
                 .build();
     }
 
-    public Author createAuthorEntity() {
+    public List<Author> createNAuthors(int n) {
+        List<Author> authors = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            Author author = getTestAuthorEntity();
+            author.setName(author.getName() + i);
+            author.setEmail(author.getEmail() + i);
+            authors.add(author);
+        }
+        return authorRepository.saveAll(authors);
+    }
+
+    public Author createTestAuthorEntity() {
         return authorRepository.save(
                 getTestAuthorEntity()
         );

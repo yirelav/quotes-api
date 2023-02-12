@@ -33,7 +33,7 @@ class AuthorsApiTest extends BaseApiTest {
     }
     @Test
     void givenAlreadyExistsAuthorReq_shouldReturn400() throws Exception {
-        entityCreator.createAuthorEntity();
+        entityCreator.createTestAuthorEntity();
         String createQuoteReq = TestUtils.loadFile("json/create_author.json");
         mockMvc.perform(MockMvcRequestBuilders.post("/authors")
                         .contentType("application/json")

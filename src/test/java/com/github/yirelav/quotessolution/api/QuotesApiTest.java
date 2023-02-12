@@ -25,7 +25,7 @@ class QuotesApiTest extends BaseApiTest {
     @Test
     void givenCreateQuoteReq_shouldCreatedWith201() throws Exception {
         assertEquals(0, quoteRepository.count());
-        entityCreator.createAuthorEntity();
+        entityCreator.createTestAuthorEntity();
         String createQuoteReq = TestUtils.loadFile("json/create_quote.json");
         mockMvc.perform(MockMvcRequestBuilders.post("/quotes")
                         .contentType("application/json")
@@ -49,7 +49,7 @@ class QuotesApiTest extends BaseApiTest {
 
     @Test
     void givenQuoteUpdateReq_shouldUpdateWith200() throws Exception {
-        Author authorEntity = entityCreator.createAuthorEntity();
+        Author authorEntity = entityCreator.createTestAuthorEntity();
         entityCreator.createNQuotes(1, authorEntity);
         assertEquals(1, quoteRepository.count());
 
@@ -69,11 +69,12 @@ class QuotesApiTest extends BaseApiTest {
 
     @Test
     void givenQuoteRemoveReq_shouldRemoveWith200() throws Exception {
-        Author authorEntity = entityCreator.createAuthorEntity();
+        Author authorEntity = entityCreator.createTestAuthorEntity();
         entityCreator.createNQuotes(1, authorEntity);
         assertEquals(1, quoteRepository.count());
+        long id = quoteRepository.findAll().get(0).getId();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/quotes/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/quotes/" + id)
                         .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
@@ -83,7 +84,7 @@ class QuotesApiTest extends BaseApiTest {
 
     @RepeatedTest(10)
     void givenRandomQuoteReq_shouldReturn200() throws Exception {
-        Author authorEntity = entityCreator.createAuthorEntity();
+        Author authorEntity = entityCreator.createTestAuthorEntity();
         entityCreator.createNQuotes(2, authorEntity);
         mockMvc.perform(MockMvcRequestBuilders.get("/quotes/random")
                         .contentType("application/json"))
