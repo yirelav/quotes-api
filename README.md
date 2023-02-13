@@ -8,7 +8,8 @@
     ```docker-compose up -d```
 
 
-3. Docker hub: https://hub.docker.com/r/vastavy/quotes-api-backend
+3. [Docker hub](https://hub.docker.com/r/vastavy/quotes-api-backend):
+    ```docker run -p 8080:8080 vastavy/quotes-api-backend```
 
 ## Documentation
 
