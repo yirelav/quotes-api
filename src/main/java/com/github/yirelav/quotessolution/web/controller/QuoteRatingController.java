@@ -1,9 +1,12 @@
 package com.github.yirelav.quotessolution.web.controller;
 
-import com.github.yirelav.quotessolution.domain.entities.RatingHistoryRecord;
 import com.github.yirelav.quotessolution.domain.enums.Vote;
 import com.github.yirelav.quotessolution.service.QuoteService;
 import com.github.yirelav.quotessolution.service.RatingService;
+import com.github.yirelav.quotessolution.web.converter.RatingConverter;
+import com.github.yirelav.quotessolution.web.dto.RatingHistoryRecordResponse;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +24,14 @@ import java.util.List;
 @AllArgsConstructor
 public class QuoteRatingController {
 
+    private final RatingConverter converter;
+
     private final RatingService ratingService;
     private final QuoteService quoteService;
 
     @PostMapping("/{quoteId}/up")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(description = "Increase quote rating")
     public void voteUp(
             @PathVariable long quoteId,
             @RequestParam String author
@@ -35,6 +41,7 @@ public class QuoteRatingController {
 
     @PostMapping("/{quoteId}/down")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(description = "Decrease quote rating")
     public void voteDown(
             @PathVariable long quoteId,
             @RequestParam String author
@@ -43,8 +50,11 @@ public class QuoteRatingController {
     }
 
     @GetMapping("/{quoteId}/ratings")
-    public List<RatingHistoryRecord> getRatings(@PathVariable Long quoteId) {
-        return ratingService.getQuoteRatings(quoteId);
+    @Operation(description = "Read all quote ratings")
+    public List<RatingHistoryRecordResponse> getRatings(@PathVariable Long quoteId) {
+        return ratingService.getQuoteRatings(quoteId)
+                .stream().map(converter::toRatingResponse)
+                .toList();
     }
 
 }

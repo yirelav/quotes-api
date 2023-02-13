@@ -2,6 +2,7 @@ package com.github.yirelav.quotessolution.web.controller;
 
 import com.github.yirelav.quotessolution.service.AuthorService;
 import com.github.yirelav.quotessolution.web.dto.CreateAuthorRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ public class AuthorController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(description = "Create an author")
     public void create(@RequestBody CreateAuthorRequest request) {
         authorService.create(request);
     }

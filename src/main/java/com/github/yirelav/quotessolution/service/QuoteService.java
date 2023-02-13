@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.retry.annotation.Retryable;
@@ -91,5 +90,9 @@ public class QuoteService {
 
     public Page<Quote> findPageAndSort(Pageable currentRating) {
         return repository.findAll(currentRating);
+    }
+
+    public List<Quote> findAll() {
+        return repository.findAll();
     }
 }

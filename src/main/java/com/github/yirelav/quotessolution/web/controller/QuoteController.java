@@ -9,7 +9,9 @@ import com.github.yirelav.quotessolution.web.dto.QuoteResponse;
 import com.github.yirelav.quotessolution.web.dto.UpdateQuoteResponse;
 import com.github.yirelav.quotessolution.web.exception.EmptyQuoteListException;
 import com.github.yirelav.quotessolution.web.exception.QuoteNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
+import org.springdoc.core.annotations.RouterOperation;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,7 @@ public class QuoteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(description = "Create quote")
     public CreateQuoteResponse add(@RequestBody CreateQuoteRequest request) {
         return converter.toCreateResponse(
                 quoteService.create(request)
@@ -42,6 +45,7 @@ public class QuoteController {
     }
 
     @GetMapping("/{quoteId}")
+    @Operation(description = "Read quote")
     public QuoteResponse get(@PathVariable Long quoteId) {
         Quote quote = quoteService.findById(quoteId).orElseThrow(
                 () -> new QuoteNotFoundException(quoteId)
@@ -50,6 +54,7 @@ public class QuoteController {
     }
 
     @PutMapping("/{quoteId}")
+    @Operation(description = "Update quote")
     public UpdateQuoteResponse update(
             @PathVariable Long quoteId,
             @RequestBody String content
@@ -60,6 +65,7 @@ public class QuoteController {
     }
 
     @DeleteMapping("/{quoteId}")
+    @Operation(description = "Delete quote")
     public QuoteResponse delete(@PathVariable Long quoteId) {
         Quote quote = quoteService.remove(quoteId)
                 .orElseThrow(() -> new QuoteNotFoundException(quoteId));
@@ -67,6 +73,7 @@ public class QuoteController {
     }
 
     @GetMapping("/random")
+    @Operation(description = "Get random quote")
     public QuoteResponse getRandom() {
         Quote quote = quoteService.findRandom().orElseThrow(
                 EmptyQuoteListException::new
@@ -75,6 +82,7 @@ public class QuoteController {
     }
 
     @GetMapping("/top10")
+    @Operation(description = "Get top 10 quotes")
     public List<QuoteResponse> top10() {
         PageRequest currentRating = PageRequest.of(0, 10, Sort.Direction.DESC, "currentRating");
         return quoteService.findPageAndSort(currentRating)
@@ -83,6 +91,7 @@ public class QuoteController {
                 .toList();
     }
     @GetMapping("/worse10")
+    @Operation(description = "Get worse 10 quotes")
     public List<QuoteResponse> worse10() {
         PageRequest currentRating = PageRequest.of(0, 10, Sort.Direction.ASC, "currentRating");
         return quoteService.findPageAndSort(currentRating)
@@ -90,4 +99,13 @@ public class QuoteController {
                 .map(converter::toQuoteResponse)
                 .toList();
     }
+
+    @GetMapping
+    @Operation(description = "Read all quotes")
+    public List<QuoteResponse> all() {
+        return quoteService.findAll().stream()
+                .map(converter::toQuoteResponse)
+                .toList();
+    }
+
 }

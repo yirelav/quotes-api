@@ -46,6 +46,7 @@ public final class Quote {
     private Integer currentRating = 0;
 
     @OneToMany(mappedBy = "quote", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Builder.Default
     private List<RatingHistoryRecord> ratings = new ArrayList<>();
 
     @ManyToOne(optional = false)

@@ -44,6 +44,7 @@ public class Author {
     private List<Quote> quotes = new ArrayList<>();
 
     @OneToMany(mappedBy = "author", orphanRemoval = true)
+    @Builder.Default
     private List<RatingHistoryRecord> ratings = new ArrayList<>();
 
     @Override
