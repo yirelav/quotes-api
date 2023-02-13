@@ -5,7 +5,6 @@ import com.github.yirelav.quotessolution.service.QuoteService;
 import com.github.yirelav.quotessolution.service.RatingService;
 import com.github.yirelav.quotessolution.web.converter.RatingConverter;
 import com.github.yirelav.quotessolution.web.dto.RatingHistoryRecordResponse;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

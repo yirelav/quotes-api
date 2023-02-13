@@ -11,7 +11,6 @@ import com.github.yirelav.quotessolution.web.exception.EmptyQuoteListException;
 import com.github.yirelav.quotessolution.web.exception.QuoteNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
-import org.springdoc.core.annotations.RouterOperation;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
