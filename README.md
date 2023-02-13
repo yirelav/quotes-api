@@ -13,7 +13,7 @@
 
 ## Documentation
 
- Available at http://localhost:8080/swagger-ui/#/
+ Available at http://localhost:8080/swagger-ui/index.html
 
 
 ## Kameleoon Trial Task
