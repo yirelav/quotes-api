@@ -34,13 +34,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.testcontainers:junit-jupiter'
-	testImplementation 'org.testcontainers:testcontainers:1.17.6'
-	testImplementation 'org.testcontainers:postgresql:1.17.6'
 	testImplementation 'com.google.guava:guava:31.1-jre'
-	testImplementation 'org.postgresql:postgresql'
-
-
-
 }
 
 dependencyManagement {
