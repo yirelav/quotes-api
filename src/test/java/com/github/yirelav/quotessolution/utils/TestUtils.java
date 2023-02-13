@@ -1,10 +1,9 @@
 package com.github.yirelav.quotessolution.utils;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-
-import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Test Utils.
@@ -12,9 +11,10 @@ import java.net.URL;
 
 public class TestUtils {
 
-    public static String loadFile(String name) throws IOException {
-        URL url = Resources.getResource(name);
-        return Resources.toString(url, Charsets.UTF_8);
+    public static String loadFile(String name) throws Exception {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URI uri = loader.getResource(name).toURI();
+        return Files.readString(Path.of(uri), StandardCharsets.UTF_8);
     }
 
 
